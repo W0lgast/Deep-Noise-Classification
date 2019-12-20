@@ -42,15 +42,15 @@ class CFourFoldCNN(nn.Module):
             in_channels=self.input_shape.channels,
             out_channels=32,
             kernel_size=(3, 3),
-            stride=(2, 2),
-            padding=(1, 1), #or is it zero?!
+            stride=1, # We believe stride = (2,2), which is written in the paper, is erroneous.
+            padding=(1,1), #or is it 0?!
         )
 
         self.conv2 = nn.Conv2d(
             in_channels=self.conv1.out_channels,
             out_channels=32,
             kernel_size=(3, 3),
-            stride=(2, 2),
+            stride=1, # We believe stride = (2,2), which is written in the paper, is erroneous.
             padding=(1, 1),  # or is it zero?!
         )
 
@@ -58,7 +58,7 @@ class CFourFoldCNN(nn.Module):
             in_channels=self.conv2.out_channels,
             out_channels=64,
             kernel_size=(3, 3),
-            stride=(2, 2),
+            stride=1, # We believe stride = (2,2), which is written in the paper, is erroneous.
             padding=(1, 1),  # or is it zero?!
         )
 
@@ -66,11 +66,14 @@ class CFourFoldCNN(nn.Module):
             in_channels=self.conv3.out_channels,
             out_channels=64,
             kernel_size=(3, 3),
-            stride=(2, 2),
+            stride=1, # We believe stride = (2,2), which is written in the paper, is erroneous.
             padding=(1, 1),  # or is it zero?!
         )
 
-        self.fc1 = nn.Linear(self.conv4.out_channels, 1024) #INP CHANNELS PROBABLY WRONG!
+        # This is the number of pixels of the image when sent to the first fully connected layer.
+        size_flat = int(self.conv4.out_channels * np.ceil(height/4.0) * np.ceil(width/4.0))
+
+        self.fc1 = nn.Linear(size_flat, 1024) #INP CHANNELS PROBABLY WRONG!
 
         self.fc2 = nn.Linear(1024, 10)
 
@@ -87,6 +90,16 @@ class CFourFoldCNN(nn.Module):
             num_features=64
         )
 
+        self.max_pool_1 = nn.MaxPool2d(kernel_size=(2, 2),
+                                       stride=(2, 2),
+                                       padding=(1, 1))
+
+        # Second max pool not explicitly mentioned in paper, but we're using it to compensate for an
+        # otherwise unexplained dimensionality reduction in terrible paper.
+        self.max_pool_2 = nn.MaxPool2d(kernel_size=(2, 2),
+                                       stride=(2, 2),
+                                       padding=(1, 1))
+
         self.initialise_layer(self.conv1)
         self.initialise_layer(self.conv2)
         self.initialise_layer(self.conv3)
@@ -100,8 +113,10 @@ class CFourFoldCNN(nn.Module):
             )
         )
 
-        x = F.relu( self.norm2d2(
-            self.conv2(x)
+        x = self.max_pool_1(
+            F.relu( self.norm2d2(
+                self.conv2(x)
+                )
             )
         )
 
@@ -110,12 +125,14 @@ class CFourFoldCNN(nn.Module):
             )
         )
 
-        x = F.relu(self.norm2d4(
-            self.conv4(x)
+        x = self.max_pool_2(
+            F.relu(self.norm2d4(
+                self.conv4(x)
+                )
             )
         )
 
-        #x = torch.flatten(x, start_dim=1) #DO I USE THIS?
+        x = torch.flatten(x, start_dim=1) #DO I USE THIS?
 
         x = F.sigmoid(
             self.fc1(

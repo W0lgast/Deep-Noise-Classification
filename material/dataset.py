@@ -1,8 +1,27 @@
+"""
+Reads pkl datasets.
+"""
+# --------------------------------------------------------------
+
+from util.message import message
+import util.utilities as ut
+
 import torch
 from torch.utils import data
 import numpy as np
 import pickle
 
+# --------------------------------------------------------------
+
+# Define feature key names
+FEAT_DICT = 'features'
+LOGMELSPEC = 'logmelspec'
+MFCC = 'mfcc'
+CHROMA = 'chroma'
+SPEC_CONT = 'spectral_contrast'
+TONNETZ = 'tonnetz'
+
+# --------------------------------------------------------------
 
 class UrbanSound8KDataset(data.Dataset):
     def __init__(self, dataset_path, mode):
@@ -10,29 +29,25 @@ class UrbanSound8KDataset(data.Dataset):
         self.mode = mode
 
     def __getitem__(self, index):
+        ind_dict = self.dataset[index]
+        feature_dict = ind_dict[FEAT_DICT]
         if self.mode == 'LMC':
             # Log-mel spectrogram, chroma, spectral contrast
             # and tonnetz are aggregated to form the LMC feature sets
-
-            # Edit here to load and concatenate the neccessary features to 
-            # create the LMC feature
+            feature = self._makeLMC(feature_dict)
             feature = torch.from_numpy(feature.astype(np.float32)).unsqueeze(0)
         elif self.mode == 'MC':
             # MFCC is combined with chroma,
             # spectral contrast and tonnetz to form the MC feature sets
-
-            # Edit here to load and concatenate the neccessary features to 
-            # create the MC feature
+            feature = self._makeMC(feature_dict)
             feature = torch.from_numpy(feature.astype(np.float32)).unsqueeze(0)
         elif self.mode == 'MLMC':
             # Combined LM, MFCC and CST together to form MLMC feature.
-
-            # Edit here to load and concatenate the neccessary features to 
-            # create the MLMC feature
+            feature = self._makeMLMC(feature_dict)
             feature = torch.from_numpy(feature.astype(np.float32)).unsqueeze(0)
        
-        label = self.dataset[index]['classID']
-        fname = self.dataset[index]['filename']
+        label = ind_dict['classID']
+        fname = ind_dict['filename']
         return feature, label, fname
 
     def __len__(self):
@@ -45,3 +60,43 @@ class UrbanSound8KDataset(data.Dataset):
     # ------------------------------------------------------------------
     # 'private' members
     # ------------------------------------------------------------------
+
+    def _makeLMC(self, feat_dict):
+        """
+        Gets LMC feature from feature dict.
+
+        :return: ndarray of LMC feature instance.
+        """
+        LMC = np.concatenate((feat_dict[LOGMELSPEC],
+                              feat_dict[CHROMA],
+                              feat_dict[SPEC_CONT],
+                              feat_dict[TONNETZ]),
+                             axis=0)
+        return LMC
+
+    def _makeMC(self, feat_dict):
+        """
+        Gets MC feature from feature dict.
+
+        :return: ndarray of MC feature instance.
+        """
+        MC = np.concatenate((feat_dict[MFCC],
+                            feat_dict[CHROMA],
+                            feat_dict[SPEC_CONT],
+                            feat_dict[TONNETZ]),
+                            axis=0)
+        return MC
+
+    def _makeMLMC(self, feat_dict):
+        """
+        Gets MLMC feature from feature dict.
+
+        :return: ndarray of MLMC feature instance.
+        """
+        MLMC =  np.concatenate((feat_dict[MFCC],
+                                feat_dict[LOGMELSPEC],
+                               feat_dict[CHROMA],
+                               feat_dict[SPEC_CONT],
+                               feat_dict[TONNETZ]),
+                               axis=0)
+        return MLMC

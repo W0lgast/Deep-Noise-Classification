@@ -2,6 +2,5 @@
 venv/
 material/UrbanSound8K_test.pkl
 material/UrbanSound8K_train.pkl
-material/__pycache__/
-util/__pycache__/
-networks/__pycache__/
+logs/
+**/__pycache__/
