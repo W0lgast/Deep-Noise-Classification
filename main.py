@@ -89,12 +89,3 @@ trainer.train(
     )
 
 summary_writer.close()
-
-
-
-for i, (input, target, filename) in enumerate(train_loader):
-    FFCNN.forward(input)
-
-for i, (input, target, filename) in enumerate(val_loader):
-    FFCNN.forward(input)
-
