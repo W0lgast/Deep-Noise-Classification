@@ -6,19 +6,11 @@ Kipp McAdam Freud, Stoil Ganev
 """
 # --------------------------------------------------------------
 
-from multiprocessing import cpu_count
-from typing import Union, NamedTuple
 import torch
 import torch.backends.cudnn
 import numpy as np
 from torch import nn, optim
 from torch.nn import functional as F
-import torchvision.datasets
-from torchvision.transforms import Compose
-from torch.optim.optimizer import Optimizer
-from torch.utils.data import DataLoader
-from torch.utils.tensorboard import SummaryWriter
-from torchvision import transforms
 
 from util.message import message
 import util.utilities as ut
