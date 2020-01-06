@@ -129,21 +129,26 @@ class CFFTrainer:
         )
 
     def validate(self):
-        results = {"preds": [], "labels": []}
+        # results = {"preds": [], "labels": []}
+        results = {}
         total_loss = 0
         self.model.eval()
 
         # No need to track gradients for validation, we're not optimizing.
         with torch.no_grad():
-            for batch, labels, filename in self.val_loader:
+            for batch, labels, filenames in self.val_loader:
                 batch = batch.to(self.device)
                 labels = labels.to(self.device)
                 logits = self.model(batch)
                 loss = self.criterion(logits, labels)
                 total_loss += loss.item()
-                preds = logits.argmax(dim=-1).cpu().numpy()
-                results["preds"].extend(list(preds))
-                results["labels"].extend(list(labels.cpu().numpy()))
+                preds = logits.cpu().numpy()
+                for (pred, label, filename) in zip(list(preds), list(labels.cpu().numpy()), filenames):
+                    file_res = results.setdefault(filename, {"preds": [], "labels": []})
+                    file_res["preds"].append(pred)
+                    file_res["labels"].append(label)
+
+        results = self.__combine_file_results(results)
 
         accuracy = compute_accuracy(
             np.array(results["labels"]), np.array(results["preds"])
@@ -166,3 +171,11 @@ class CFFTrainer:
         print(f"validation loss: {average_loss:.5f}, accuracy: {accuracy * 100:2.2f}")
         for label, acc in per_class_acc.items():
             print(f"Accuracy for class '{label}': {acc * 100:2.2f}")
+
+    @staticmethod
+    def __combine_file_results(results):
+        new_res = {"preds": [], "labels": []}
+        for res in results.values():
+            new_res["preds"].append(np.argmax(np.mean(res["preds"], axis=0)))
+            new_res["labels"].append(np.round(np.mean(res["labels"])).astype(int))
+        return new_res
