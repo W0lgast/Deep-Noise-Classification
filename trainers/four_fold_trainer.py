@@ -6,6 +6,7 @@ Kipp McAdam Freud, Stoil Ganvel
 # --------------------------------------------------------------
 
 from util.data_proc import compute_accuracy
+from util.data_proc import compute_per_class_accuracy
 
 import time
 import torch
@@ -147,6 +148,9 @@ class CFFTrainer:
         accuracy = compute_accuracy(
             np.array(results["labels"]), np.array(results["preds"])
         )
+        per_class_acc = compute_per_class_accuracy(
+            np.array(results["labels"]), np.array(results["preds"])
+        )
         average_loss = total_loss / len(self.val_loader)
 
         self.summary_writer.add_scalars(
@@ -160,3 +164,5 @@ class CFFTrainer:
                 self.step
         )
         print(f"validation loss: {average_loss:.5f}, accuracy: {accuracy * 100:2.2f}")
+        for label, acc in per_class_acc.items():
+            print(f"Accuracy for class '{label}': {acc * 100:2.2f}")
