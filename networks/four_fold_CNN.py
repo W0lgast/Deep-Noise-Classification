@@ -136,13 +136,13 @@ class CFourFoldCNN(nn.Module):
 
         x = F.sigmoid(
             self.fc1(
-                self.dropout(x)
+                x
             )
         )
 
         x = F.softmax(
             self.fc2(
-                x
+                self.dropout(x)
             )
         )
 
