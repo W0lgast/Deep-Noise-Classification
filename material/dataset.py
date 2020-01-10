@@ -61,6 +61,10 @@ class UrbanSound8KDataset(data.Dataset):
     # 'private' members
     # ------------------------------------------------------------------
 
+    def get_feature_dict(self, index):
+        ind_dict = self.dataset[index]
+        return ind_dict[FEAT_DICT]
+
     def _makeLMC(self, feat_dict):
         """
         Gets LMC feature from feature dict.
