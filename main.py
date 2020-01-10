@@ -64,7 +64,8 @@ criterion = torch.nn.CrossEntropyLoss()
 # todo:: They claim a momentum of 0.9, and that they user Adam... (?)
 # todo:: They use L2 regularization, but dont give a value, this is the Adam 'weight decay' param.
 optimizer = torch.optim.Adam(FFCNN.parameters(),
-                             lr=LEARNING_RATE)
+                             lr=LEARNING_RATE,
+                             weight_decay=1e-5)
 
 summary_writer = SummaryWriter(
             str(LOG_DIR),
