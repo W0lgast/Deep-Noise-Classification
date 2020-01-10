@@ -100,26 +100,34 @@ class CFourFoldCNN(nn.Module):
         self.initialise_layer(self.fc2)
 
     def forward(self, images: torch.Tensor) -> torch.Tensor:
-        x = F.relu( self.norm2d1(
-            self.conv1(images)
+        x = F.relu(
+            self.norm2d1(
+                self.conv1(images)
             )
         )
 
         x = self.max_pool_1(
-            F.relu( self.norm2d2(
-                self.conv2(x)
+            F.relu(
+                self.norm2d2(
+                    self.conv2(
+                        self.dropout(x)
+                    )
                 )
             )
         )
 
-        x = F.relu(self.norm2d3(
-            self.conv3(x)
+        x = F.relu(
+            self.norm2d3(
+                self.conv3(x)
             )
         )
 
         x = self.max_pool_2(
-            F.relu(self.norm2d4(
-                self.conv4(x)
+            F.relu(
+                self.norm2d4(
+                    self.conv4(
+                        self.dropout(x)
+                    )
                 )
             )
         )
@@ -128,7 +136,7 @@ class CFourFoldCNN(nn.Module):
 
         x = F.sigmoid(
             self.fc1(
-                x
+                self.dropout(x)
             )
         )
 

@@ -54,7 +54,7 @@ FFCNN = CFourFoldCNN(
     width=41,
     channels=1,
     class_count=10,
-    dropout=0
+    dropout=0.5
 )
 
 # Define the criterion to be softmax cross entropy
