@@ -83,7 +83,7 @@ trainer = CFFTrainer(
 )
 
 trainer.train(
-        epochs=20,
+        epochs=50,
         val_frequency=5,
         print_frequency=10,
         log_frequency=10,
