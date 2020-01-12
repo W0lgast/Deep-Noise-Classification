@@ -5,9 +5,6 @@ Kipp McAdam Freud, Stoil Ganvel
 """
 # --------------------------------------------------------------
 
-from util.data_proc import compute_accuracy
-from util.data_proc import compute_per_class_accuracy
-
 import time
 import torch
 import torch.backends.cudnn
@@ -16,6 +13,9 @@ from torch import nn
 from torch.optim.optimizer import Optimizer
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
+
+from util.data_proc import compute_accuracy
+from util.data_proc import compute_per_class_accuracy
 
 # --------------------------------------------------------------
 

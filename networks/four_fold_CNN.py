@@ -11,6 +11,7 @@ import torch.backends.cudnn
 import numpy as np
 from torch import nn, optim
 from torch.nn import functional as F
+import pickle
 
 from util.message import message
 import util.utilities as ut
@@ -147,6 +148,11 @@ class CFourFoldCNN(nn.Module):
         )
 
         return x
+
+    def save(self, filename: str):
+        outfile = open(filename, 'wb')
+        pickle.dump(self, outfile)
+        outfile.close()
 
     @staticmethod
     def initialise_layer(layer):
