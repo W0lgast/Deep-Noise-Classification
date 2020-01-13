@@ -1,2 +1,49 @@
-DEBUG::main_train::__main__::Begining training on MLMC data.
+DEBUG::main_test::__main__::Testing model trained for mode LMC.
+DEBUG::data_proc::validate::validation accuracy: 70.25
+DEBUG::data_proc::validate::Accuracy for class 'air_conditioner': 38.00
+DEBUG::data_proc::validate::Accuracy for class 'car_horn': 81.82
+DEBUG::data_proc::validate::Accuracy for class 'children_playing': 77.00
+DEBUG::data_proc::validate::Accuracy for class 'dog_bark': 72.00
+DEBUG::data_proc::validate::Accuracy for class 'drilling': 84.00
+DEBUG::data_proc::validate::Accuracy for class 'engine_idling': 60.22
+DEBUG::data_proc::validate::Accuracy for class 'gun_shot': 93.75
+DEBUG::data_proc::validate::Accuracy for class 'jackhammer': 98.96
+DEBUG::data_proc::validate::Accuracy for class 'siren': 56.63
+DEBUG::data_proc::validate::Accuracy for class 'street_music': 62.00
+DEBUG::main_test::__main__::Testing model trained for mode MC.
+DEBUG::data_proc::validate::validation accuracy: 75.39
+DEBUG::data_proc::validate::Accuracy for class 'air_conditioner': 52.00
+DEBUG::data_proc::validate::Accuracy for class 'car_horn': 78.79
+DEBUG::data_proc::validate::Accuracy for class 'children_playing': 74.00
+DEBUG::data_proc::validate::Accuracy for class 'dog_bark': 69.00
+DEBUG::data_proc::validate::Accuracy for class 'drilling': 75.00
+DEBUG::data_proc::validate::Accuracy for class 'engine_idling': 82.80
+DEBUG::data_proc::validate::Accuracy for class 'gun_shot': 93.75
+DEBUG::data_proc::validate::Accuracy for class 'jackhammer': 93.75
+DEBUG::data_proc::validate::Accuracy for class 'siren': 61.45
+DEBUG::data_proc::validate::Accuracy for class 'street_music': 87.00
+DEBUG::main_test::__main__::Testing model trained for mode MLMC.
+DEBUG::data_proc::validate::validation accuracy: 75.39
+DEBUG::data_proc::validate::Accuracy for class 'air_conditioner': 47.00
+DEBUG::data_proc::validate::Accuracy for class 'car_horn': 93.94
+DEBUG::data_proc::validate::Accuracy for class 'children_playing': 78.00
+DEBUG::data_proc::validate::Accuracy for class 'dog_bark': 79.00
+DEBUG::data_proc::validate::Accuracy for class 'drilling': 91.00
+DEBUG::data_proc::validate::Accuracy for class 'engine_idling': 70.97
+DEBUG::data_proc::validate::Accuracy for class 'gun_shot': 96.88
+DEBUG::data_proc::validate::Accuracy for class 'jackhammer': 96.88
+DEBUG::data_proc::validate::Accuracy for class 'siren': 48.19
+DEBUG::data_proc::validate::Accuracy for class 'street_music': 75.00
+DEBUG::main_test::__main__::Testing model trained for mode TSCNN.
+DEBUG::data_proc::validate::validation accuracy: 76.46
+DEBUG::data_proc::validate::Accuracy for class 'air_conditioner': 44.00
+DEBUG::data_proc::validate::Accuracy for class 'car_horn': 84.85
+DEBUG::data_proc::validate::Accuracy for class 'children_playing': 82.00
+DEBUG::data_proc::validate::Accuracy for class 'dog_bark': 75.00
+DEBUG::data_proc::validate::Accuracy for class 'drilling': 80.00
+DEBUG::data_proc::validate::Accuracy for class 'engine_idling': 79.57
+DEBUG::data_proc::validate::Accuracy for class 'gun_shot': 96.88
+DEBUG::data_proc::validate::Accuracy for class 'jackhammer': 98.96
+DEBUG::data_proc::validate::Accuracy for class 'siren': 60.24
+DEBUG::data_proc::validate::Accuracy for class 'street_music': 81.00
 DEBUG::Exiting program with success status.

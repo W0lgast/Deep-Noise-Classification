@@ -9,12 +9,10 @@ Kipp McAdam Freud, Stoil Ganev
 import torch
 import torch.backends.cudnn
 import numpy as np
-from torch import nn, optim
+from torch import nn
 from torch.nn import functional as F
 import pickle
 
-from util.message import message
-import util.utilities as ut
 from util.data_proc import ImageShape
 
 # --------------------------------------------------------------

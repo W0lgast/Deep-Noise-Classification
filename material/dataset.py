@@ -45,6 +45,20 @@ class UrbanSound8KDataset(data.Dataset):
             # Combined LM, MFCC and CST together to form MLMC feature.
             feature = self._makeMLMC(feature_dict)
             feature = torch.from_numpy(feature.astype(np.float32)).unsqueeze(0)
+        elif self.mode == "TSCNN":
+            # This mode is to be used with a fusion model, we return a list of two features,
+            # the MC and LMC features
+            mc_feature = self._makeMC(feature_dict)
+            mc_feature = torch.from_numpy(mc_feature.astype(np.float32)).unsqueeze(0)
+            lmc_feature = self._makeLMC(feature_dict)
+            lmc_feature = torch.from_numpy(lmc_feature.astype(np.float32)).unsqueeze(0)
+            feature = [mc_feature, lmc_feature]
+            feature = torch.stack(feature)
+            #feature = torch.from_numpy(feature)
+            #feature = torch.from_numpy(feature.astype(np.float32)).unsqueeze(0)
+        else:
+            message.logError("Unknown mode.", "UrbanSound8KDataset::__getitem__")
+            ut.exit(0)
        
         label = ind_dict['classID']
         fname = ind_dict['filename']

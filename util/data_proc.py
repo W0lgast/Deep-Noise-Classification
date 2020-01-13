@@ -7,14 +7,27 @@ Kipp Freud
 
 # ------------------------------------------------------------------
 
+import torch
 from typing import Union, NamedTuple, Dict
 from torch import Tensor
 import numpy as np
 
 import util.utilities as ut
 from util.message import message
+from networks.late_fusion_CNN import CLateFusionCNN
 
 # ------------------------------------------------------------------
+
+if torch.cuda.is_available():
+    DEVICE = torch.device("cuda")
+else:
+    DEVICE = torch.device("cpu")
+
+# ------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------
+# data & data types
+#-----------------------------------------------------------------------------------------
 
 LABEL_NAMES = {
     0: 'air_conditioner',
@@ -29,11 +42,14 @@ LABEL_NAMES = {
     9: 'street_music'
 }
 
-
 class ImageShape(NamedTuple):
     height: int
     width: int
     channels: int
+
+#-----------------------------------------------------------------------------------------
+# public functions
+#-----------------------------------------------------------------------------------------
 
 def getSubDict(dic, keys):
     """
@@ -69,3 +85,43 @@ def compute_per_class_accuracy(
     for label, (label_count, pred_count) in enumerate(zip(label_counts, pred_counts)):
         accuracies[LABEL_NAMES[label]] = float(pred_count) / label_count
     return accuracies
+
+def validate(model, test_loader):
+    results = {}
+    model.eval()
+
+    # No need to track gradients for validation, we're not optimizing.
+    with torch.no_grad():
+        for batch, labels, filenames in test_loader:
+            batch = batch.to(DEVICE)
+            labels = labels.to(DEVICE)
+            logits = model(batch)
+            preds = logits.cpu().numpy()
+            for (pred, label, filename) in zip(list(preds), list(labels.cpu().numpy()), filenames):
+                file_res = results.setdefault(filename, {"preds": [], "labels": []})
+                file_res["preds"].append(pred)
+                file_res["labels"].append(label)
+    results = _combine_file_results(results)
+    accuracy = compute_accuracy(
+        np.array(results["labels"]), np.array(results["preds"])
+    )
+    per_class_acc = compute_per_class_accuracy(
+        np.array(results["labels"]), np.array(results["preds"])
+    )
+
+    message.logDebug(f"validation accuracy: {accuracy * 100:2.2f}",
+                     "data_proc::validate")
+    for label, acc in per_class_acc.items():
+        message.logDebug(f"Accuracy for class '{label}': {acc * 100:2.2f}",
+                         "data_proc::validate")
+
+#-----------------------------------------------------------------------------------------
+# private functions
+#-----------------------------------------------------------------------------------------
+
+def _combine_file_results(results):
+    new_res = {"preds": [], "labels": []}
+    for res in results.values():
+        new_res["preds"].append(np.argmax(np.mean(res["preds"], axis=0)))
+        new_res["labels"].append(np.round(np.mean(res["labels"])).astype(int))
+    return new_res
