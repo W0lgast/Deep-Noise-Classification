@@ -100,7 +100,7 @@ for mode in ['MC', 'LMC', 'MLMC']:
             log_frequency=10,
         )
 
-    FFCNN.save("models/" + mode + "_four_fold_cnn.pkl")
+    FFCNN.save("models/" + mode + "_NEWORDER_four_fold_cnn.pkl")
 
     summary_writer.close()
 
