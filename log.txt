@@ -1,1 +1,2 @@
+DEBUG::main_train::__main__::Begining training on MLMC data.
 DEBUG::Exiting program with success status.

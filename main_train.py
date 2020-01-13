@@ -39,7 +39,7 @@ LEARNING_RATE = 0.001
 
 # --------------------------------------------------------------
 
-for mode in ['LMC', 'MC', 'MLMC']:
+for mode in ['MC', 'LMC', 'MLMC']:
 
     message.logDebug("Begining training on " + mode + " data.",
                      "main_train::__main__")
@@ -56,10 +56,14 @@ for mode in ['LMC', 'MC', 'MLMC']:
          batch_size=32, shuffle=False,
          num_workers=NUM_WORKERS, pin_memory=True)
 
+    channels = train_loader.dataset[0][0].shape[0]
+    height = train_loader.dataset[0][0].shape[1]
+    width = train_loader.dataset[0][0].shape[2]
+
     FFCNN = CFourFoldCNN(
-        height=85,
-        width=41,
-        channels=1,
+        height=height,
+        width=width,
+        channels=channels,
         class_count=10,
         dropout=0.5
     )
