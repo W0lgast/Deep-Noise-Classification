@@ -99,51 +99,37 @@ class CFourFoldCNN(nn.Module):
         self.initialise_layer(self.fc2)
 
     def forward(self, images: torch.Tensor) -> torch.Tensor:
-        x = F.relu(
-            self.norm2d1(
-                self.conv1(images)
-            )
-        )
+        x = self.conv1(images)
+        x = F.relu(x)
+        x = self.norm2d1(x)
 
-        x = self.max_pool_1(
-            F.relu(
-                self.norm2d2(
-                    self.conv2(
-                        self.dropout(x)
-                    )
-                )
-            )
-        )
+        x = self.conv2(x)
+        x = F.relu(x)
+        x = self.norm2d2(x)
+        x = self.dropout(x)
 
-        x = F.relu(
-            self.norm2d3(
-                self.conv3(x)
-            )
-        )
 
-        x = self.max_pool_2(
-            F.relu(
-                self.norm2d4(
-                    self.conv4(
-                        self.dropout(x)
-                    )
-                )
-            )
-        )
+        x = self.max_pool_1(x)
+
+        x = self.conv3(x)
+        x = F.relu(x)
+        x = self.norm2d3(x)
+
+        x = self.conv4(x)
+        x = F.relu(x)
+        x = self.norm2d4(x)
+        x = self.dropout(x)
+
+        x = self.max_pool_2(x)
 
         x = torch.flatten(x, start_dim=1) #DO I USE THIS?
 
-        x = F.sigmoid(
-            self.fc1(
-                x
-            )
-        )
+        x = self.fc1(x)
+        x = torch.sigmoid(x)
+        x = self.dropout(x)
 
-        x = F.softmax(
-            self.fc2(
-                self.dropout(x)
-            )
-        )
+        x = self.fc2(x)
+        x = F.softmax(x)
 
         return x
 
