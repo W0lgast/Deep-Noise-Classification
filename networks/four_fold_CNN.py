@@ -106,10 +106,9 @@ class CFourFoldCNN(nn.Module):
         x = self.conv2(x)
         x = F.relu(x)
         x = self.norm2d2(x)
-        x = self.dropout(x)
-
 
         x = self.max_pool_1(x)
+        x = self.dropout(x)
 
         x = self.conv3(x)
         x = F.relu(x)
@@ -118,9 +117,9 @@ class CFourFoldCNN(nn.Module):
         x = self.conv4(x)
         x = F.relu(x)
         x = self.norm2d4(x)
-        x = self.dropout(x)
 
         x = self.max_pool_2(x)
+        x = self.dropout(x)
 
         x = torch.flatten(x, start_dim=1) #DO I USE THIS?
 
