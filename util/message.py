@@ -25,8 +25,6 @@ class CMessage(object):
         # start the logfile
         self._logfile = None
         self._logFile(self._logname)
-        # store timing info
-        self.timing = {}
 
     # ------------------------------------------------------------------
     # 'public' members
@@ -69,18 +67,6 @@ class CMessage(object):
         the function where the message is coming from.
         '''
         self._log(message, DEBUG_TAG, funcname)
-
-
-    def logTiming(self, method, time_taken):
-        '''
-        Log timing info that will be printed now and saved in the log now, but also will be held and shown again
-        when :func:`showTiming` is called.
-        '''
-        strm = str(method)
-        tt = time_taken * 1000
-        message.logDebug('{0}  {1:.2f} ms'.format(strm, tt), "CMessage::timeit")
-        if strm not in self.timing: self.timing[strm] = [tt]
-        else: self.timing[strm].append(tt)
 
     # ------------------------------------------------------------------
     # 'private' members
