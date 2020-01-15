@@ -4,7 +4,7 @@ Before you can do anything, download the pkl files if they're not in the materia
 
 ---------------------------------------
 
-To run on blue crystal run train.sh
+To run on blue crystal run sbatch train.sh
 
 ---------------------------------------
 
