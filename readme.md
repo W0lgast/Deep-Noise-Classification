@@ -1,10 +1,6 @@
 ---------------------------------------
 
-Before you can do anything, download the pkl files if they're not in the material folder, and put them in the material folder!
-
----------------------------------------
-
-To run on blue crystal run sbatch train.sh
+Before you can do anything, download the Urbansound 8k pkl files if they're not in the material folder from https://urbansounddataset.weebly.com/, and put them in the material folder!
 
 ---------------------------------------
 
